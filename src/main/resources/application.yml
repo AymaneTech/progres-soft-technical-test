@@ -17,10 +17,10 @@ app:
   open-api:
     server:
       url: http://localhost:8080
-      description: Waiting room management module api
+      description: progres soft technical test
     info:
-      title: Waiting room management module
-      description: Waiting room management module
+      title: progres soft api
+      description:  progres soft technical test
       version: 1.0.0
       contact:
         name: Aymane El Maini
