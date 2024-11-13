@@ -89,7 +89,7 @@ Content-Type: application/json
 Request Body:
 ```json
 {
-  "dealId": "DR123456",
+  "id": "DR123456",
   "fromCurrency": "USD",
   "toCurrency": "EUR",
   "timestamp": "2024-01-01T10:00:00Z",
