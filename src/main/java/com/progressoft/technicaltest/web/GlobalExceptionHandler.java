@@ -37,30 +37,6 @@ public class GlobalExceptionHandler {
                 errors);
     }
 
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse dataIntegrityViolation(DataIntegrityViolationException e, WebRequest request) {
-        return new ErrorResponse(
-                HttpStatus.BAD_REQUEST.value(),
-                LocalDateTime.now(),
-                "Data Integrity Violation",
-                request.getDescription(false),
-                e.getMostSpecificCause().getMessage()
-        );
-    }
-
-    @ExceptionHandler(IllegalArgumentException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse illegalArgumentException(final IllegalArgumentException ex, WebRequest request) {
-        return new ErrorResponse(
-                HttpStatus.BAD_REQUEST.value(),
-                LocalDateTime.now(),
-                "illegal argument exception",
-                request.getDescription(false),
-                ex.getMessage()
-        );
-    }
-
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse runtime(RuntimeException e, WebRequest request) {

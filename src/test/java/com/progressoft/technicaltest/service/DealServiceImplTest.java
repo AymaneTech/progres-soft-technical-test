@@ -3,6 +3,7 @@ package com.progressoft.technicaltest.service;
 import com.progressoft.technicaltest.dto.DealRequestDto;
 import com.progressoft.technicaltest.dto.DealResponseDto;
 import com.progressoft.technicaltest.entity.Deal;
+import com.progressoft.technicaltest.exception.DuplicateDealIdException;
 import com.progressoft.technicaltest.mapper.DealMapper;
 import com.progressoft.technicaltest.repository.DealRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,61 +31,50 @@ class DealServiceImplTest {
 
     private DealService underTest;
 
+    private DealRequestDto dealRequestDto;
+    private Deal deal;
+
     @BeforeEach
     void setup() {
         underTest = new DealServiceImpl(dealRepository, dealMapper);
+        dealRequestDto = new DealRequestDto("deal123",
+                Currency.getInstance("MAD"),
+                Currency.getInstance("USD"),
+                LocalDateTime.now(),
+                BigDecimal.valueOf(2000)
+        );
+
+        deal = new Deal(dealRequestDto.id(),
+                dealRequestDto.fromCurrency(),
+                dealRequestDto.toCurrency(),
+                dealRequestDto.timestamp(),
+                dealRequestDto.amount());
     }
 
     @Test
     void givenValidRequest_whenSave_thenReturnCreatedDeal() {
-        DealRequestDto request = new DealRequestDto("deal123",
-                Currency.getInstance("MAD"),
-                Currency.getInstance("USD"),
-                LocalDateTime.now(),
-                BigDecimal.valueOf(2000)
-        );
+        given(dealMapper.toEntity(dealRequestDto)).willReturn(deal);
+        given(dealRepository.save(any(Deal.class))).willReturn(deal);
+        given(dealMapper.toResponseEntity(deal))
+                .willReturn(new DealResponseDto(dealRequestDto.id(),
+                        dealRequestDto.fromCurrency(),
+                        dealRequestDto.toCurrency(),
+                        dealRequestDto.timestamp(),
+                        dealRequestDto.amount()));
 
-        Deal excepted = new Deal(request.id(),
-                request.fromCurrency(),
-                request.toCurrency(),
-                request.timestamp(),
-                request.amount());
-
-        given(dealMapper.toEntity(request)).willReturn(excepted);
-        given(dealRepository.save(any(Deal.class))).willReturn(excepted);
-        given(dealMapper.toResponseEntity(excepted))
-                .willReturn(new DealResponseDto(request.id(),
-                        request.fromCurrency(),
-                        request.toCurrency(),
-                        request.timestamp(),
-                        request.amount()));
-
-        DealResponseDto actual = underTest.save(request);
+        DealResponseDto actual = underTest.save(dealRequestDto);
 
         assertThat(actual).isNotNull();
-        assertThat(actual.id()).isEqualTo(excepted.getId());
+        assertThat(actual.id()).isEqualTo(deal.getId());
         verify(dealRepository).save(any(Deal.class));
     }
 
     @Test
-    void givenRepositoryThrowRuntimeException_whenSave_thenThrowRuntimeException() {
-        DealRequestDto request = new DealRequestDto("deal123",
-                Currency.getInstance("MAD"),
-                Currency.getInstance("USD"),
-                LocalDateTime.now(),
-                BigDecimal.valueOf(2000)
-        );
+    void givenDealIdAlreadyExists_whenSave_thenThrowDuplicatedDealIdException() {
+        given(dealRepository.existsById("existent-id")).willReturn(true);
 
-        Deal excepted = new Deal(request.id(),
-                request.fromCurrency(),
-                request.toCurrency(),
-                request.timestamp(),
-                request.amount());
-
-        given(dealMapper.toEntity(request)).willReturn(excepted);
-        given(dealRepository.save(any(Deal.class))).willThrow(RuntimeException.class);
-
-        assertThatExceptionOfType(RuntimeException.class)
-                .isThrownBy(() -> underTest.save(request));
+        assertThatExceptionOfType(DuplicateDealIdException.class)
+                .isThrownBy(() -> underTest.save(dealRequestDto))
+                .withMessage("Deal id already exists");
     }
 }
