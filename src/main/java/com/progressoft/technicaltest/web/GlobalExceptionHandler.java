@@ -1,7 +1,6 @@
 package com.progressoft.technicaltest.web;
 
 import com.progressoft.technicaltest.exception.ErrorResponse;
-import com.progressoft.technicaltest.exception.CurrencyMismatchException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
@@ -69,18 +68,6 @@ public class GlobalExceptionHandler {
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 LocalDateTime.now(),
                 e.getClass().getSimpleName(),
-                request.getDescription(false),
-                e.getMessage()
-        );
-    }
-
-    @ExceptionHandler(CurrencyMismatchException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse dealCreationException(CurrencyMismatchException e, WebRequest request) {
-        return new ErrorResponse(
-                HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                LocalDateTime.now(),
-                "Failed to save deal for validation issues",
                 request.getDescription(false),
                 e.getMessage()
         );
