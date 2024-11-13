@@ -1,7 +1,7 @@
 package com.progressoft.technicaltest.web;
 
 import com.progressoft.technicaltest.exception.ErrorResponse;
-import com.progressoft.technicaltest.exception.ToCurrencyAndFromCurrencyAreSame;
+import com.progressoft.technicaltest.exception.CurrencyMismatchException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
@@ -74,9 +74,9 @@ public class GlobalExceptionHandler {
         );
     }
 
-    @ExceptionHandler(ToCurrencyAndFromCurrencyAreSame.class)
+    @ExceptionHandler(CurrencyMismatchException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse dealCreationException(ToCurrencyAndFromCurrencyAreSame e, WebRequest request) {
+    public ErrorResponse dealCreationException(CurrencyMismatchException e, WebRequest request) {
         return new ErrorResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 LocalDateTime.now(),

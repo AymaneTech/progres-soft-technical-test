@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -20,6 +21,7 @@ import java.util.Currency;
 @Setter
 @Accessors(chain = true)
 @RequiredArgsConstructor
+@AllArgsConstructor
 public class Deal {
 
     @Id
