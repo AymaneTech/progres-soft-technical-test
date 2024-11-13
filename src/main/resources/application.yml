@@ -14,16 +14,8 @@ spring:
       dialect: org.hibernate.dialect.PostgreSQLDialect
 server:
   port: 8081
-app:
-  open-api:
-    server:
-      url: http://localhost:8080
-      description: progres soft technical test
-    info:
-      title: progres soft api
-      description:  progres soft technical test
-      version: 1.0.0
-      contact:
-        name: Aymane El Maini
-        email: elmainiaymane03@gmail.com
-        url: https://aymaneelmaini.vercel.app
+
+logging:
+  level:
+    org.springframework.data.jpa.repository.query: debug
+    com.progressoft.technicaltest: trace
