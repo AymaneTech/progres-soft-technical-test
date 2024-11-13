@@ -3,7 +3,6 @@ package com.progressoft.technicaltest.service;
 import com.progressoft.technicaltest.dto.DealRequestDto;
 import com.progressoft.technicaltest.dto.DealResponseDto;
 import com.progressoft.technicaltest.entity.Deal;
-import com.progressoft.technicaltest.exception.CurrencyMismatchException;
 import com.progressoft.technicaltest.mapper.DealMapper;
 import com.progressoft.technicaltest.repository.DealRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,25 +28,11 @@ class DealServiceImplTest {
     @Mock
     private DealMapper dealMapper;
 
-    private DealService sut;
+    private DealService underTest;
 
     @BeforeEach
     void setup() {
-        sut = new DealServiceImpl(dealRepository, dealMapper);
-    }
-
-    @Test
-    void givenInvalidRequest_whenSave_thenThrowCurrencyMismatchException() {
-        DealRequestDto request = new DealRequestDto("deal123",
-                Currency.getInstance("MAD"),
-                Currency.getInstance("MAD"),
-                LocalDateTime.now(),
-                BigDecimal.valueOf(2000)
-        );
-
-        assertThatExceptionOfType(CurrencyMismatchException.class)
-                .isThrownBy(() -> sut.save(request))
-                .withMessage("You can't save deal with same from and to currency");
+        underTest = new DealServiceImpl(dealRepository, dealMapper);
     }
 
     @Test
@@ -74,10 +59,32 @@ class DealServiceImplTest {
                         request.timestamp(),
                         request.amount()));
 
-        DealResponseDto actual = sut.save(request);
+        DealResponseDto actual = underTest.save(request);
 
         assertThat(actual).isNotNull();
         assertThat(actual.id()).isEqualTo(excepted.getId());
         verify(dealRepository).save(any(Deal.class));
+    }
+
+    @Test
+    void givenRepositoryThrowRuntimeException_whenSave_thenThrowRuntimeException() {
+        DealRequestDto request = new DealRequestDto("deal123",
+                Currency.getInstance("MAD"),
+                Currency.getInstance("USD"),
+                LocalDateTime.now(),
+                BigDecimal.valueOf(2000)
+        );
+
+        Deal excepted = new Deal(request.id(),
+                request.fromCurrency(),
+                request.toCurrency(),
+                request.timestamp(),
+                request.amount());
+
+        given(dealMapper.toEntity(request)).willReturn(excepted);
+        given(dealRepository.save(any(Deal.class))).willThrow(RuntimeException.class);
+
+        assertThatExceptionOfType(RuntimeException.class)
+                .isThrownBy(() -> underTest.save(request));
     }
 }

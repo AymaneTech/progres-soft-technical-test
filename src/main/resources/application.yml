@@ -12,7 +12,8 @@ spring:
     show-sql: true
     properties:
       dialect: org.hibernate.dialect.PostgreSQLDialect
-
+server:
+  port: 8081
 app:
   open-api:
     server:
