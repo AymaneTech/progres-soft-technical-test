@@ -58,18 +58,13 @@ FX Data Warehouse is designed to process and store Foreign Exchange deals with r
 
 1. Clone the repository
 ```bash
-git clone https://github.com/yourusername/fx-warehouse.git
-cd fx-warehouse
+git clone https://github.com/AymaneTech/progres-soft-technical-test
+cd progres-soft-technical-technical
 ```
 
-2. Start the PostgreSQL container
+2. Start Application 
 ```bash
 make up
-```
-
-3. Build and run the application
-```bash
-make run
 ```
 
 ### Using Makefile
@@ -78,8 +73,6 @@ The project includes a Makefile with the following commands:
 ```bash
 make up      # Start Docker containers
 make down    # Stop Docker containers
-make build   # Build the application
-make run     # Run the application
 make test    # Run tests
 make clean   # Clean build files
 ```
