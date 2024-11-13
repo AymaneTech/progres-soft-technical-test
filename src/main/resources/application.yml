@@ -13,6 +13,7 @@ spring:
     properties:
       dialect: org.hibernate.dialect.PostgreSQLDialect
 
+app:
   open-api:
     server:
       url: http://localhost:8080
