@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: Progres Soft Technical Test
+  datasource:
+    url: jdbc:postgresql://localhost:5433/test_db
+    username: pguser
+    password: password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+server:
+  port: 8081
+
+logging:
+  level:
+    org.springframework.data.jpa.repository.query: debug
+    com.progressoft.technicaltest: trace

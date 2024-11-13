@@ -71,7 +71,7 @@ class DealServiceImplTest {
 
     @Test
     void givenDealIdAlreadyExists_whenSave_thenThrowDuplicatedDealIdException() {
-        given(dealRepository.existsById("existent-id")).willReturn(true);
+        given(dealRepository.existsById(dealRequestDto.id())).willReturn(true);
 
         assertThatExceptionOfType(DuplicateDealIdException.class)
                 .isThrownBy(() -> underTest.save(dealRequestDto))
