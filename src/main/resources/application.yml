@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: Progres Soft Technical Test
+  datasource:
+    url: jdbc:postgresql://localhost:5433/prod_db
+    username: pguser
+    password: password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  open-api:
+    server:
+      url: http://localhost:8080
+      description: Waiting room management module api
+    info:
+      title: Waiting room management module
+      description: Waiting room management module
+      version: 1.0.0
+      contact:
+        name: Aymane El Maini
+        email: elmainiaymane03@gmail.com
+        url: https://aymaneelmaini.vercel.app

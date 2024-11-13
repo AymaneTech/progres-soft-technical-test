@@ -1,7 +1,6 @@
 package com.progressoft.technicaltest.web;
 
 import com.progressoft.technicaltest.exception.ErrorResponse;
-import com.progressoft.technicaltest.exception.EntityNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
@@ -48,18 +47,6 @@ public class GlobalExceptionHandler {
                 "Data Integrity Violation",
                 request.getDescription(false),
                 e.getMostSpecificCause().getMessage()
-        );
-    }
-
-    @ExceptionHandler(EntityNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse entityNotFoundException(final EntityNotFoundException ex, WebRequest request) {
-        return new ErrorResponse(
-                HttpStatus.NOT_FOUND.value(),
-                LocalDateTime.now(),
-                ENTITY_NOT_FOUND_MESSAGE,
-                request.getDescription(false),
-                ex.getMessage()
         );
     }
 
