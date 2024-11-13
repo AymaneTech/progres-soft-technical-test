@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.Currency;
 
 public record DealRequestDto(
-        @NotBlank @UniqueField(entityClass = Deal.class, fieldName = "id", message = "Deal unique Id already exists") String id,
+        @NotBlank @UniqueField(entityClass = Deal.class, fieldName = "id", message = "Deal Id already exists") String id,
         @NotNull Currency fromCurrency,
         @NotNull Currency toCurrency,
         @NotNull LocalDateTime timestamp,
